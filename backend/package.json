@@ -1,0 +1,28 @@
+{
+  "name": "sb-code-challenge",
+  "version": "1.0.0",
+  "description": "Code Challenge",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vietky/sb-code-challenge.git"
+  },
+  "keywords": [
+    "challenge"
+  ],
+  "author": "Viet Ký",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vietky/sb-code-challenge/issues"
+  },
+  "homepage": "https://github.com/vietky/sb-code-challenge#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "pg": "^7.4.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.22.15"
+  }
+}
