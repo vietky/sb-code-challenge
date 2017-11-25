@@ -1,13 +1,15 @@
 const express = require('express')
 const router = express.Router()
+const {
+    events,
+    questions,
+    user_actions,
+    defaultCallback
+} = require('../handlers/')
 
-const defaultCallback = (req, res) => {
-    res.send('This site is underconstruction')
-}
-
-router.get('/events/:event_code', defaultCallback)
+router.get('/events/:event_code', events.getByCode)
 router.get('/events/:event_code/feed', defaultCallback)
-router.post('/events/:event_code/questions/', defaultCallback)
-router.put('/events/:event_code/questions/:question_id/vote', defaultCallback)
+router.post('/events/:event_code/questions/', questions.create)
+router.put('/events/:event_code/questions/:question_id/vote', user_actions.vote)
 
 module.exports = router

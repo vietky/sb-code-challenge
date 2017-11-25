@@ -8,7 +8,11 @@ module.exports = (handler, req, res) => {
         })
         .catch((error) => {
             logger.error(error)
-            res.json(error)
+            res.status(404)
+                .json({
+                    message: error.message,
+                    stack: error.stack
+                })
                 .end()
         })
 }

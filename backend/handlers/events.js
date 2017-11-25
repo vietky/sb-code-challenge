@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const { Event, Question } = require('../models')
 
-function getByUser (req, res) {
+function getByUser(req, res) {
     const user_id = req.user_id
     return Event.findAll({
         where: {
@@ -13,8 +13,9 @@ function getByUser (req, res) {
     })
 }
 
-function getByCode (req) {
+function getByCode(req) {
     const code = req.params['event_code']
+    const order_by = req.query
     return Event.findOne({
         where: {
             code
@@ -24,8 +25,10 @@ function getByCode (req) {
             return Promise.resolve(null)
         }
         const event = rawEvent.get({ plain: true })
+
         return Question.findAll({
             where: {
+                is_shown: true,
                 event_id: event.id
             }
         }).then((rawQuestions) => {
@@ -35,7 +38,7 @@ function getByCode (req) {
     })
 }
 
-function create (req) {
+function create(req) {
     const user_id = req.user_id
     const {
         code,
@@ -50,7 +53,7 @@ function create (req) {
     })
 }
 
-function update (req) {
+function update(req) {
     const user_id = req.user_id
     const {
         code,

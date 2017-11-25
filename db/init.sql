@@ -41,6 +41,8 @@ CREATE UNIQUE INDEX idx_events_code ON events(code);
 
 CREATE TABLE questions (
     id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL, -- if user is authenticated, we use user_id
+    ip VARCHAR(100) NOT NULL, -- we use ip to identify anonymous user    
     description VARCHAR(1000),
     event_id INTEGER  NOT NULL,
     is_highlighted BOOLEAN NOT NULL,
@@ -50,13 +52,18 @@ CREATE TABLE questions (
 );
 
 ALTER TABLE questions ADD CONSTRAINT fk_questions_event_id FOREIGN KEY (event_id) REFERENCES events (id);
+CREATE INDEX idx_questions_event_id ON questions(event_id);
 
 CREATE TABLE user_actions (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL, -- if user is authenticated, we use user_id
+    ip VARCHAR(100) NOT NULL, -- we use ip to identify anonymous user
     action_name VARCHAR(100),
     question_id INTEGER NOT NULL,
     created_date TIMESTAMP NOT NULL
 );
 
 ALTER TABLE user_actions ADD CONSTRAINT fk_user_actions_user_id FOREIGN KEY (user_id) REFERENCES users (id);
+CREATE INDEX idx_user_actions_ip_action_name_question_id ON user_actions(ip, action_name, question_id);
+CREATE INDEX idx_user_actions_user_id_action_name ON user_actions(user_id, action_name);
+CREATE INDEX idx_user_actions_question_id ON user_actions(question_id);

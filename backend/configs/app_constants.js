@@ -1,5 +1,8 @@
 module.exports = {
     DEFAULT_AUDIENCE_ID: -1,
+    USER_ACTIONS: {
+        VOTE: 'vote'
+    },
     ROLES: {
         ADMIN: 1,
         AUDIENCE: 2

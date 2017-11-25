@@ -6,7 +6,7 @@ const {
     authenticationCache
 } = require('../caches/')
 
-module.exports = function login (req, res) {
+module.exports = function login(req, res) {
     const {
         username,
         password
@@ -20,9 +20,7 @@ module.exports = function login (req, res) {
 
         // TODO: should hash the password here...
         if (user.password !== password) {
-            return Promise.reject({
-                message: `Wrong password`
-            })
+            return Promise.reject(new Error(`Wrong password`))
         }
         return authenticationCache.create(user.id)
             .then((token) => {
