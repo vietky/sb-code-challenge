@@ -1,16 +1,16 @@
-const { Question } = require('../models');
+const { Question } = require('../models')
 
-function update(req) {
-    const question_id = req.question_id;
-    const params = {};
+function update (req) {
+    const question_id = req.question_id
+    const params = {}
     if (req.description) {
-        params.description = req.description;
+        params.description = req.description
     }
     if (req.is_highlighted) {
-        params.is_highlighted = req.is_highlighted;
+        params.is_highlighted = req.is_highlighted
     }
     if (req.is_shown) {
-        params.is_shown = req.is_shown;
+        params.is_shown = req.is_shown
     }
     return Question.update(params, {
         where: {
@@ -19,7 +19,7 @@ function update(req) {
     })
 }
 
-function hide(req) {
+function hide (req) {
     return update({
         question_id: req.question_id,
         body: {

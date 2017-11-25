@@ -1,4 +1,4 @@
-const authenticationCache = require('./authentication_cache');
+const authenticationCache = require('./authentication_cache')
 
 module.exports = {
     authenticationCache

@@ -1,24 +1,24 @@
-const response = require('./response');
-const login = require('./login');
-const events = require('./events');
-const questions = require('./questions');
+const response = require('./response')
+const login = require('./login')
+const events = require('./events')
+const questions = require('./questions')
 
 module.exports = {
     login: wrapResponseHandler(login, response),
     events: remapHandler(events),
     questions: remapHandler(questions),
     defaultCallback: (req, res) => {
-        res.send('This site is underconstruction');
+        res.send('This site is underconstruction')
     }
 }
 
-function remapHandler(handlerObj) {
+function remapHandler (handlerObj) {
     for (let key in handlerObj) {
         handlerObj[key] = wrapResponseHandler(handlerObj[key], response)
     };
-    return handlerObj;
+    return handlerObj
 }
 
-function wrapResponseHandler(handler, response) {
-    return response.bind(null, handler);
+function wrapResponseHandler (handler, response) {
+    return response.bind(null, handler)
 }

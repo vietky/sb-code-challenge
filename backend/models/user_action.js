@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize');
-const sequelize = require('./sequelize');
+const Sequelize = require('sequelize')
+const sequelize = require('./sequelize')
 
 const UserAction = sequelize.define('user_actions', {
     id: { type: Sequelize.INTEGER, primaryKey: true },

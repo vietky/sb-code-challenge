@@ -5,8 +5,8 @@ const {
     admin,
     audience,
     common
-} = require('./routers/');
-const logger = require('./libs/logger');
+} = require('./routers/')
+const logger = require('./libs/logger')
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -19,8 +19,8 @@ app.use('/audiences', audience)
 app.use('/', common)
 
 process.on('unhandledRejection', (error, p) => {
-    logger.error('Unhandled Rejection at: Promise', p, 'reason:', error, error.stack);
+    logger.error('Unhandled Rejection at: Promise', p, 'reason:', error, error.stack)
     // application specific logging, throwing an error, or other logic here
-});
+})
 
 app.listen(3000, () => logger.info('Shop Back api listening on port 3000!'))

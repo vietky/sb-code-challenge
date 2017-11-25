@@ -1,4 +1,4 @@
-const logger = require('../libs/logger');
+const logger = require('../libs/logger')
 
 module.exports = (handler, req, res) => {
     return handler(req, res)
@@ -7,8 +7,8 @@ module.exports = (handler, req, res) => {
                 .end()
         })
         .catch((error) => {
-            logger.error(error);
+            logger.error(error)
             res.json(error)
-                .end();
+                .end()
         })
 }

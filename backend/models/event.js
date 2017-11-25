@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize');
-const sequelize = require('./sequelize');
+const Sequelize = require('sequelize')
+const sequelize = require('./sequelize')
 
 const Event = sequelize.define('events', {
     id: { type: Sequelize.INTEGER, primaryKey: true },

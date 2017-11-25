@@ -43,6 +43,8 @@ CREATE TABLE questions (
     id SERIAL PRIMARY KEY,
     description VARCHAR(1000),
     event_id INTEGER  NOT NULL,
+    is_highlighted BOOLEAN NOT NULL,
+    is_shown BOOLEAN NOT NULL,
     created_date TIMESTAMP NOT NULL,
     modified_date TIMESTAMP NOT NULL
 );
