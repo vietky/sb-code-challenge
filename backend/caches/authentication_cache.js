@@ -4,7 +4,7 @@ const {
 } = require('../configs/app_constants')
 const string = require('../utils/string')
 
-function generateToken (user_id, token, minutes) {
+function generateToken(user_id, token, minutes) {
     const now = new Date()
     const expired_date = moment(now).add(minutes, 'minutes').toDate()
     return {
@@ -16,32 +16,32 @@ function generateToken (user_id, token, minutes) {
 }
 
 class TokenCache {
-    constructor () {
+    constructor() {
         this.byUserId = {}
         this.byToken = {}
     }
-    set (token) {
+    set(token) {
         this.byUserId[token.user_id] = token
         this.byToken[token.token] = token
     }
-    delete (token) {
+    delete(token) {
         if (!token) {
             return
         }
         delete this.byUserId[token.user_id]
         delete this.byToken[token.token]
     }
-    getByUserId (user_id) {
+    getByUserId(user_id) {
         return this.byUserId[user_id]
     }
-    getByToken (tokenString) {
+    getByToken(tokenString) {
         return this.byToken[tokenString]
     }
 }
 
 let cache = new TokenCache()
 
-function inject () {
+function inject() {
     const token = `ioFPw1ukERfkXWGa1wAPuCRatSVDsCAC7vcTAysnStwVg6jq2X`
     const now = new Date()
     const expired_date = moment(now).add(30, 'minutes').toDate()
@@ -53,12 +53,12 @@ function inject () {
     })
 }
 
-inject()
+// inject()
 
 // a simple in-memory cache storing user token
 // all of the functions here are using Promise just in case we change in-memory to redis cache
 class AuthenticationToken {
-    create (userId) {
+    create(userId) {
         let token = cache.getByUserId(userId)
         cache.delete(token)
 
@@ -66,7 +66,7 @@ class AuthenticationToken {
         cache.set(token)
         return Promise.resolve(token)
     }
-    get (tokenString) {
+    get(tokenString) {
         const token = cache.getByToken(tokenString)
         const now = new Date()
         if (!token || token.expired_date < now) {
@@ -75,7 +75,7 @@ class AuthenticationToken {
         }
         return Promise.resolve(token)
     }
-    clear () {
+    clear() {
         cache = new TokenCache()
     }
 }

@@ -1,5 +1,5 @@
 const Event = require('./event')
-const Question = require('./Question')
+const Question = require('./question')
 const Role = require('./role')
 const User = require('./user')
 const UserAction = require('./user_action')
