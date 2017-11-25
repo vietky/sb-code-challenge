@@ -14,13 +14,13 @@ module.exports = {
     }
 }
 
-function remapHandler(handlerObj) {
+function remapHandler (handlerObj) {
     for (let key in handlerObj) {
         handlerObj[key] = wrapResponseHandler(handlerObj[key], response)
     };
     return handlerObj
 }
 
-function wrapResponseHandler(handler, response) {
+function wrapResponseHandler (handler, response) {
     return response.bind(null, handler)
 }

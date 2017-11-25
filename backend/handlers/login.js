@@ -6,7 +6,7 @@ const {
     authenticationCache
 } = require('../caches/')
 
-module.exports = function login(req, res) {
+module.exports = function login (req, res) {
     const {
         username,
         password

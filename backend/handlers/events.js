@@ -1,7 +1,7 @@
 const _ = require('lodash')
-const { Event, Question } = require('../models')
+const { sequelize, Event } = require('../models')
 
-function getByUser(req, res) {
+function getByUser (req, res) {
     const user_id = req.user_id
     return Event.findAll({
         where: {
@@ -13,9 +13,47 @@ function getByUser(req, res) {
     })
 }
 
-function getByCode(req) {
+function getQuestionsByEventId (eventId, orderBy, asc = 'ASC') {
+    switch (orderBy) {
+        case 'created_date':
+            return sequelize.query(`
+        SELECT *
+        FROM questions
+        ORDER BY created_date ${asc}
+    `, {
+                replacements: {
+                    event_id: eventId
+                },
+                type: sequelize.QueryTypes.SELECT
+            })
+        default:
+            return sequelize.query(`
+        SELECT q.*, CASE WHEN t.count IS NULL THEN 0 ELSE t.count END likes
+        FROM questions q
+        LEFT JOIN (
+            SELECT question_id, COUNT(1) count
+            FROM user_actions
+            WHERE question_id IN (
+                SELECT id
+                FROM questions
+                WHERE event_id = :event_id
+            )
+            GROUP BY question_id
+        ) t ON q.id = t.question_id
+        WHERE is_shown = true
+        ORDER BY likes ${asc}, modified_date DESC
+    `, {
+                replacements: {
+                    event_id: eventId
+                },
+                type: sequelize.QueryTypes.SELECT
+            })
+    }
+}
+
+function getByCode (req) {
     const code = req.params['event_code']
-    const order_by = req.query
+    const { order_by, ascending } = req.query
     return Event.findOne({
         where: {
             code
@@ -25,20 +63,15 @@ function getByCode(req) {
             return Promise.resolve(null)
         }
         const event = rawEvent.get({ plain: true })
-
-        return Question.findAll({
-            where: {
-                is_shown: true,
-                event_id: event.id
-            }
-        }).then((rawQuestions) => {
-            event.questions = _.map(rawQuestions, (question) => question.get({ plain: true }))
-            return Promise.resolve(event)
-        })
+        return getQuestionsByEventId(event.id, order_by, ascending === '1' ? 'ASC' : 'DESC')
+            .then((questions) => {
+                event.questions = questions
+                return Promise.resolve(event)
+            })
     })
 }
 
-function create(req) {
+function create (req) {
     const user_id = req.user_id
     const {
         code,
@@ -53,7 +86,7 @@ function create(req) {
     })
 }
 
-function update(req) {
+function update (req) {
     const user_id = req.user_id
     const {
         code,

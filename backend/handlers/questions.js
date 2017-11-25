@@ -2,10 +2,11 @@ const { sequelize, Event, Question } = require('../models')
 const {
     MAX_HIGH_LIGHT_QUESTIONS,
     DEFAULT_AUDIENCE_ID
-} = require('../configs/app_constants');
+} = require('../configs/app_constants')
 
-function validate(params, transaction) {
+function validate (params, transaction) {
     if (params.is_highlighted == true) {
+        const question_id = params.question_id
         return sequelize.query(`
         SELECT event_id, COUNT(1) count
         FROM questions
@@ -30,18 +31,19 @@ function validate(params, transaction) {
             if (result[0].count >= MAX_HIGH_LIGHT_QUESTIONS) {
                 return Promise.reject(new Error(`You can't highlight more than ${MAX_HIGH_LIGHT_QUESTIONS} questions`))
             }
-            return Promise.resolve(true);
+            return Promise.resolve(true)
         })
     }
+    return Promise.resolve(true)
 }
 
-function create(req) {
-    const user_id = DEFAULT_AUDIENCE_ID;
-    const ip = req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    const event_code = req.params.event_code;
+function create (req) {
+    const user_id = DEFAULT_AUDIENCE_ID
+    const ip = req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.connection.remoteAddress
+    const event_code = req.params.event_code
     const {
         description
-    } = req.body;
+    } = req.body
     return sequelize.transaction((t) => {
         return Event.findOne({
             where: {
@@ -60,11 +62,11 @@ function create(req) {
                 is_shown: true,
                 is_highlighted: false
             })
-        });
+        })
     })
 }
 
-function update(req) {
+function update (req) {
     const params = {}
     params.question_id = req.params.question_id
     if (req.description) {
@@ -84,12 +86,12 @@ function update(req) {
                         question_id: params.question_id
                     },
                     transaction: t
-                });
-            });
-    });
+                })
+            })
+    })
 }
 
-function hide(req) {
+function hide (req) {
     return update({
         question_id: req.params.question_id,
         body: {
