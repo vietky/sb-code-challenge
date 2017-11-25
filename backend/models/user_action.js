@@ -6,8 +6,8 @@ const UserAction = sequelize.define('user_actions', {
     user_id: { type: Sequelize.INTEGER },
     action_name: { type: Sequelize.STRING },
     question_id: { type: Sequelize.INTEGER },
-    created_date: { type: Sequelize.DATE, defaultValue: Sequelize.NOW },
-    modified_date: { type: Sequelize.DATE, defaultValue: Sequelize.NOW }
+    createdAt: { type: Sequelize.DATE, field: 'created_date' },
+    updatedAt: { type: Sequelize.DATE, field: 'modified_date' }
 }, {
     tableName: 'user_actions'
 })

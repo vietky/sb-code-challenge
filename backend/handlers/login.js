@@ -2,8 +2,11 @@ const {
     User
 } = require('../models');
 
+const {
+    authenticationCache
+} = require('../caches/');
+
 module.exports = function login(req, res) {
-    console.log('arguments', arguments);
     const {
         username,
         password
@@ -14,14 +17,18 @@ module.exports = function login(req, res) {
         }
     }).then((rawUser) => {
         const user = rawUser.get({ plain: true })
-        console.log('user', user)
-            // TODO: should hash the password here...
-        if (user.password == password) {
-            delete user.password;
-            return Promise.resolve(user);
+
+        // TODO: should hash the password here...
+        if (user.password != password) {
+            return Promise.reject({
+                message: `Wrong password`
+            })
         }
-        return Promise.reject({
-            message: `Wrong password`
-        })
+        return authenticationCache.create(user.id)
+            .then((token) => {
+                delete user.password;
+                user.token = token.token;
+                return Promise.resolve(user);
+            })
     })
 }

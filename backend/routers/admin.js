@@ -1,14 +1,18 @@
 const express = require('express')
 const router = express.Router()
+const auth = require('../middlewares/authentication')
+const {
+    events,
+    questions
+} = require('../handlers/')
 
-const defaultCallback = (req, res) => {
-    res.send('This site is underconstruction');
-}
+router.get('/events/', auth, events.getByUser)
+router.post('/events/', auth, events.create)
 
-router.get('/events/', defaultCallback)
-router.post('/events/', defaultCallback)
-router.put('/events/:event_id', defaultCallback)
-router.put('/events/:event_id/hightlight', defaultCallback)
-router.delete('/events/:event_id', defaultCallback)
+router.get('/events/:event_code', auth, events.getByCode)
+router.put('/events/:event_code', auth, events.update)
 
-module.exports = router;
+router.put('/questions/:question_id', auth, questions.update)
+router.delete('/questions/:question_id', auth, questions.hide)
+
+module.exports = router

@@ -2,10 +2,9 @@ const express = require('express')
 const router = express.Router()
 
 const {
-    response,
     login
-} = require('../handlers');
+} = require('../handlers')
 
-router.post('/login', response.bind(null, login))
+router.post('/login', login)
 
-module.exports = router;
+module.exports = router
