@@ -1,0 +1,12 @@
+.custom-menu {
+    float: right;
+    display: block;
+    margin: 0;
+}
+
+.custom-menu li {
+    display: inline-block;
+    margin-left: 5px;
+    height: 50px;
+    line-height: 50px;
+}
