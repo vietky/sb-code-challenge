@@ -1,13 +1,10 @@
 # sb-code-challenge
 
-### HOW TO RUN
-
-1. Navigate to folder **db/** & follow the README.md to init db
-2. Navigate to folder **backend/** & follow the README.md to start api
-3. Navigate to folder **frontend/** & follow the README.md to run the web
-
+Follow these steps one by one to run the project:
 
 ### INIT DB
+
+Navigate to folder **/db/** and run the following commands
 
 - `docker network create --subnet=172.18.0.0/16 shop_back_network`
 - `docker build -t shop_back_db .`
@@ -15,8 +12,15 @@
 
 ### INIT API
 
+Navigate to folder **/backend/** and run the following commands
+
 - `docker build -t shop_back_api .`
-- `docker run -e NODE_ENV=production --name shop_back_api -p 8080:3000 -d --network shop_back_network shop_back_api`
+- `docker run -e NODE_ENV=production -e DB_HOST=172.18.0.17 --name shop_back_api -p 8080:3000 -d --network shop_back_network shop_back_api`
+
+### INIT FRONTEND
+
+Navigate to folder **/frontend/** and run the following commands
+
 
 ### TEST
 
