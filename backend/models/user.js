@@ -11,7 +11,7 @@ const User = sequelize.define('users', {
     password: { type: Sequelize.STRING },
     role_id: { type: Sequelize.INTEGER },
     created_date: { type: Sequelize.DATE, field: 'created_date', defaultValue: Sequelize.NOW },
-    updated_date: { type: Sequelize.DATE, field: 'created_date', defaultValue: Sequelize.NOW }
+    modified_date: { type: Sequelize.DATE, field: 'modified_date', defaultValue: Sequelize.NOW }
 }, {
     tableName: 'users',
     timestamps: false

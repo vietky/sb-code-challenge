@@ -12,7 +12,7 @@ const Event = sequelize.define('events', {
     start_date: { type: Sequelize.DATE },
     end_date: { type: Sequelize.DATE },
     created_date: { type: Sequelize.DATE, field: 'created_date', defaultValue: Sequelize.NOW },
-    updated_date: { type: Sequelize.DATE, field: 'created_date', defaultValue: Sequelize.NOW }
+    modified_date: { type: Sequelize.DATE, field: 'modified_date', defaultValue: Sequelize.NOW }
 }, {
     tableName: 'events',
     timestamps: false

@@ -14,7 +14,7 @@ const Question = sequelize.define('questions', {
     is_highlighted: { type: Sequelize.BOOLEAN },
     is_shown: { type: Sequelize.BOOLEAN },
     created_date: { type: Sequelize.DATE, field: 'created_date', defaultValue: Sequelize.NOW },
-    updated_date: { type: Sequelize.DATE, field: 'created_date', defaultValue: Sequelize.NOW }
+    modified_date: { type: Sequelize.DATE, field: 'modified_date', defaultValue: Sequelize.NOW }
 }, {
     tableName: 'questions',
     timestamps: false

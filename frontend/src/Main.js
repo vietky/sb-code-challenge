@@ -12,9 +12,10 @@ const Main = () => (
 <Jumbotron>
     <Grid>
         <Switch>
-        <Route exact path='/' component={Home}/>
-        <Route exact path='/admin' component={Admin}/>
-        <Route exact path='/audience' component={Audience}/>
+        <Route exact path='/' component={(Home)}/>
+        <Route exact path='/admin' component={(Admin)}/>
+        <Route exact path='/admin/events' component={(Admin)}/>
+        <Route exact path='/audience/:eventCode' component={(Audience)}/>
         </Switch>
     </Grid>
 </Jumbotron>
