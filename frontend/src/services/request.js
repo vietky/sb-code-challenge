@@ -24,7 +24,7 @@ class Request {
                     var info = JSON.parse(body);
                     return resolve(info);
                 }
-                return reject(error)
+                return reject(error || body)
             })
         })
     }
@@ -36,11 +36,11 @@ class Request {
                 headers: getDefaultHeader(),
                 body: JSON.stringify(body)
             }, (error, response, body) => {
+                var info = JSON.parse(body);
                 if (!error && response.statusCode === 200) {
-                    var info = JSON.parse(body);
                     return resolve(info);
                 }
-                return reject(error)
+                return reject(error || info)
             })
         })
     }
@@ -52,11 +52,11 @@ class Request {
                 headers: getDefaultHeader(),                
                 body: JSON.stringify(body)
             }, (error, response, body) => {
+                var info = JSON.parse(body);
                 if (!error && response.statusCode === 200) {
-                    var info = JSON.parse(body);
                     return resolve(info);
                 }
-                return reject(error)
+                return reject(error || info)
             })
         })
     }
@@ -67,11 +67,11 @@ class Request {
                 url: `${this.host}${url}`,
                 headers: getDefaultHeader()                
             }, (error, response, body) => {
+                var info = JSON.parse(body);
                 if (!error && response.statusCode === 200) {
-                    var info = JSON.parse(body);
                     return resolve(info);
                 }
-                return reject(error)
+                return reject(error || info)
             })
         })
     }
