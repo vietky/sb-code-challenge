@@ -40,3 +40,4 @@ Navigate to folder **/frontend/** and run the following commands
 
 - UI to manage events => Please consult postman link above to create/update events
 - CSS :)
+- Dockerize & deploy frontend stuffs

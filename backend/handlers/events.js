@@ -4,7 +4,7 @@ const {
     USER_ACTIONS
 } = require('../configs/app_constants')
 
-function getByUser (req, res) {
+function getByUser(req, res) {
     const user_id = req.user_id
     return Event.findAll({
         where: {
@@ -26,31 +26,23 @@ function getQuestionsLikedByUser(event_id, user_id, ip) {
         WHERE event_id = :event_id
     )
     `, {
-                replacements: {
-                    ip,
-                    user_id,
-                    action_name: USER_ACTIONS.VOTE,
-                    event_id
-                },
-                type: sequelize.QueryTypes.SELECT
-            });
+        replacements: {
+            ip,
+            user_id,
+            action_name: USER_ACTIONS.VOTE,
+            event_id
+        },
+        type: sequelize.QueryTypes.SELECT
+    }).then((actions) => {
+        return Promise.resolve(_.map(actions, (item) => item.question_id));
+    });
 }
 
-function getQuestionsByEventId (eventId, orderBy, asc = 'ASC') {
-    switch (orderBy) {
-        case 'created_date':
-            return sequelize.query(`
-        SELECT *
-        FROM questions
-        ORDER BY created_date ${asc}
-    `, {
-                replacements: {
-                    event_id: eventId
-                },
-                type: sequelize.QueryTypes.SELECT
-            })
-        default:
-            return sequelize.query(`
+function getQuestionsByEventId(eventId, orderBy, asc = 'ASC') {
+    if (orderBy !== 'created_date') {
+        orderBy = 'likes'
+    }
+    return sequelize.query(`
         SELECT q.*, CASE WHEN t.count IS NULL THEN 0 ELSE t.count END likes
         FROM questions q
         LEFT JOIN (
@@ -64,19 +56,19 @@ function getQuestionsByEventId (eventId, orderBy, asc = 'ASC') {
             GROUP BY question_id
         ) t ON q.id = t.question_id
         WHERE is_shown = true
-        ORDER BY likes ${asc}, modified_date DESC
+        ORDER BY ${orderBy} ${asc}
     `, {
-                replacements: {
-                    event_id: eventId
-                },
-                type: sequelize.QueryTypes.SELECT
-            })
-    }
+        replacements: {
+            event_id: eventId
+        },
+        type: sequelize.QueryTypes.SELECT
+    })
+
 }
 
-function getByCode (req) {
+function getByCode(req) {
     const userId = req.user_id ? parseInt(req.user_id, 10) || -1 : -1;
-    const ip = req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.connection.remoteAddress    
+    const ip = req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.connection.remoteAddress
     const code = req.params['event_code']
     const { order_by, ascending } = req.query
     return Event.findOne({
@@ -89,9 +81,9 @@ function getByCode (req) {
         }
         const event = rawEvent.get({ plain: true })
         return Promise.all([
-            getQuestionsByEventId(event.id, order_by, ascending === '1' ? 'ASC' : 'DESC'),
-            getQuestionsLikedByUser(event.id, userId, ip)
-        ])
+                getQuestionsByEventId(event.id, order_by, ascending === '1' ? 'ASC' : 'DESC'),
+                getQuestionsLikedByUser(event.id, userId, ip)
+            ])
             .then((results) => {
                 event.questions = results[0];
                 event.questionsLikedByUser = results[1];
@@ -100,7 +92,7 @@ function getByCode (req) {
     })
 }
 
-function create (req) {
+function create(req) {
     const user_id = req.user_id
     const {
         code,
@@ -115,7 +107,7 @@ function create (req) {
     })
 }
 
-function update (req) {
+function update(req) {
     const user_id = req.user_id
     const {
         code,
