@@ -91,18 +91,23 @@ class Audience extends Component {
                 is_highlighted,
                 created_date,
                 description,
+                likes,
                 liked
             } = question;
-            const name = user_id === -1 ? "Anonymous" : `Unknown ${user_id}`
+            const name = (user_id === -1 ? "Anonymous" : `Unknown ${user_id}`) + ` (${likes} likes)`
             return (
                 <div className={`question ${is_highlighted ? 'highlighted' : ''}`}>
                     <div className="avatar"></div>
-                    <div className="name">{name}</div>
-                    <div className="date">{created_date}</div>
-                    <div className="description">{description}</div>
+                    <div className="user-info">
+                        <div className="text-primary">{name}</div>
+                        <div className="text-default">{created_date}</div>
+                    </div>
+                    <div className="clearfix"></div>
                     <div className="action">
                         <Vote liked={liked} onClick={self._voteQuestion.bind(self, id)}/>
                     </div>
+                    <div className="description">{description}</div>
+                    <div className="clearfix"></div>
                 </div>
             )
         }
@@ -141,6 +146,7 @@ class Audience extends Component {
                 <div className="questions">
                     {
                         _.map(questions, (question, index) => {
+                            question.liked = event.questionsLikedByUser.indexOf(question.id) > -1;
                             return (<Question key={index} question={question}></Question>);
                         })
                     }

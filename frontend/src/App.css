@@ -1,3 +1,4 @@
+
 .custom-menu {
     float: right;
     display: block;
@@ -9,4 +10,40 @@
     margin-left: 5px;
     height: 50px;
     line-height: 50px;
+}
+
+.question {
+    display: block;
+    background: #ffffff;
+    border: 1px solid #777777;
+    margin: 0px auto 5px;
+    padding: 5px;
+}
+
+.question .avatar {
+    display: block;
+    background-image: url('./avatar.jpg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    float: left;
+    width: 50px;
+    height: 50px;
+}
+
+.question .user-info {
+    display: block;
+    padding: 0px 5px 0px 55px;
+    border-bottom: 1px solid #eeeeee;
+    height: 50px;
+}
+
+.question .action {
+    display: block;
+    float: left;
+    width: 50px;
+    margin: 0px auto 5px;
+}
+
+.question .description {
+    padding: 5px;
 }

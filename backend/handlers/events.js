@@ -1,5 +1,8 @@
 const _ = require('lodash')
 const { sequelize, Event } = require('../models')
+const {
+    USER_ACTIONS
+} = require('../configs/app_constants')
 
 function getByUser (req, res) {
     const user_id = req.user_id
@@ -11,6 +14,26 @@ function getByUser (req, res) {
         const eventList = _.map(rawResults, (item) => item.get({ plain: true }))
         return Promise.resolve(eventList)
     })
+}
+
+function getQuestionsLikedByUser(event_id, user_id, ip) {
+    return sequelize.query(`
+    SELECT *
+    FROM user_actions
+    WHERE user_id = :user_id AND ip = :ip AND action_name = :action_name AND question_id IN (
+        SELECT id
+        FROM questions
+        WHERE event_id = :event_id
+    )
+    `, {
+                replacements: {
+                    ip,
+                    user_id,
+                    action_name: USER_ACTIONS.VOTE,
+                    event_id
+                },
+                type: sequelize.QueryTypes.SELECT
+            });
 }
 
 function getQuestionsByEventId (eventId, orderBy, asc = 'ASC') {
@@ -52,6 +75,8 @@ function getQuestionsByEventId (eventId, orderBy, asc = 'ASC') {
 }
 
 function getByCode (req) {
+    const userId = req.user_id ? parseInt(req.user_id, 10) || -1 : -1;
+    const ip = req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.connection.remoteAddress    
     const code = req.params['event_code']
     const { order_by, ascending } = req.query
     return Event.findOne({
@@ -63,9 +88,13 @@ function getByCode (req) {
             return Promise.resolve(null)
         }
         const event = rawEvent.get({ plain: true })
-        return getQuestionsByEventId(event.id, order_by, ascending === '1' ? 'ASC' : 'DESC')
-            .then((questions) => {
-                event.questions = questions
+        return Promise.all([
+            getQuestionsByEventId(event.id, order_by, ascending === '1' ? 'ASC' : 'DESC'),
+            getQuestionsLikedByUser(event.id, userId, ip)
+        ])
+            .then((results) => {
+                event.questions = results[0];
+                event.questionsLikedByUser = results[1];
                 return Promise.resolve(event)
             })
     })
