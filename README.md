@@ -23,6 +23,7 @@ All apis needed: https://www.getpostman.com/collections/b2c8123d857c107da1a6
 
 Postman environment:
 - host: `http://localhost:8080`
+- username & password for existing admin: **admin/admin**
 
 ### INIT FRONTEND
 
